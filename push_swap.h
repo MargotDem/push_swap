@@ -6,4 +6,11 @@
 // delete
 # include <stdio.h>
 
+typedef struct s_stack
+{
+	int		nb;
+	struct s_stack *prev;
+	struct s_stack *next;
+}				t_stack;
+
 #endif
