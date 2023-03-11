@@ -4,7 +4,6 @@ FLAGS = -Werror -Wextra -Wall
 LIBS = -L ./libft -lft
 
 FILES = main.c \
-	test_sets.c \
 
 OBJ_FILES = $(FILES:%.c=%.o)
 

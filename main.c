@@ -15,6 +15,21 @@ int	in_order(int *nbs, int size)
 	return (1);
 }
 
+int	stack_in_order(t_stack *stack)
+{
+	t_stack	*head;
+
+	head = stack;
+	stack = stack->next;
+	while (stack != head)
+	{
+		if (stack->prev->nb >= stack->nb)
+			return (0);
+		stack = stack->next;
+	}
+	return (1);
+}
+
 void	print_stack(t_stack *stack, int size)
 {
 	int	i;
@@ -22,6 +37,24 @@ void	print_stack(t_stack *stack, int size)
 	i = 0;
 	printf("\n\n");
 	while (i < size)
+	{
+		printf("%d:	%d		(prev: %d, next: %d)\n", i + 1, stack->nb, stack->prev->nb, stack->next->nb);
+		stack = stack->next;
+		i++;
+	}
+}
+
+void	print_stack2(t_stack *stack)
+{
+	t_stack	*head;
+	int		i;
+
+	i = 1;
+	head = stack;
+	printf("\n\n");
+	printf("%d:	%d		(prev: %d, next: %d)\n", i, stack->nb, stack->prev->nb, stack->next->nb);
+	stack = stack->next;
+	while (stack != head)
 	{
 		printf("%d:	%d		(prev: %d, next: %d)\n", i + 1, stack->nb, stack->prev->nb, stack->next->nb);
 		stack = stack->next;
@@ -200,32 +233,165 @@ void	tests(int *nbs, int size)
 	print_stack(a, 7);
 	print_stack(b, 3);
 
+
+	printf("\n\nnew printing fonction\n");
+	print_stack2(a);
+	print_stack2(b);
+
 	// free a and b lolilol
+}
+
+void	tests_inorder(int *nbs, int size)
+{
+	t_stack	*a;
+
+	a = init_stack(nbs, size);
+	if (stack_in_order(a))
+		printf("\nyes in order\n");
+	else
+		printf("\nnot in order\n");
+}
+
+/*void	bbl_sort(t_stack *stack)
+{
+	t_stack	*head;
+
+	head = stack;
+	stack = stack->next;
+	while (stack != head)
+	{
+		stack = stack->next;
+	}
+	
+}*/
+
+void	bbl_sort(t_stack **stack, int size)
+{
+	int	i;
+
+	i = 0;
+	while (i < size - 1)
+	{
+		if ((*stack)->nb > (*stack)->next->nb)
+			swap(stack);
+		rotate(stack);
+		i++;
+	}
+	rotate(stack);
+}
+
+void	test_bbl_sort(int *nbs, int size)
+{
+	t_stack	*a;
+	int	i = 0;
+
+	a = init_stack(nbs, size);
+	print_stack2(a);
+	while(!stack_in_order(a))
+	{
+		bbl_sort(&a, size);
+		i++;
+	}
+	print_stack2(a);
+	printf("\n\n bbl sort took %d moves\n\n", i);
+}
+
+void	go_through(t_stack **stack_1, t_stack **stack_2, int flip)
+{
+	t_stack	*a;
+	t_stack	*head;
+
+	a = *stack_1;
+	head = a;
+	a = a->next;
+	while (a != head)
+	{
+		if (flip % 2)
+		{
+			if (a->nb > (*stack_2)->nb)
+				push(stack_2, &a);
+		}
+		else
+		{
+			if (a->nb < (*stack_2)->nb)
+				push(stack_2, &a);
+		}
+		a = a->next;
+	}
+}
+
+void	test_bad_algo(int *nbs, int size)
+{
+	t_stack	*a;
+	t_stack	*b;
+	int	i;
+	i = 0;
+
+	b = NULL;
+	a = init_stack(nbs, size);
+	
+	
+	push(&b, &a);
+	
+	
+	/*print_stack2(b);
+	push(&b, &a);
+	push(&b, &a);
+
+	print_stack2(b);
+*/
+
+
+	print_stack2(b);
+	while(i < 20)
+	{
+		go_through(&a, &b, i);
+		i++;
+	}
+	printf("\ntadaaaaa (i is %d)\n", i);
+	//print_stack2(a);
+	print_stack2(b);
 }
 
 int	main(void)
 {
-	printf("heyoooo %d\n", test10_1[1]);
 
 	//system("leaks push_swap");
 
 
-	tests(test10_1, 10);
+	//tests(test10_1, 10);
+	
+	//tests_inorder(test10_1, 10);
+
+	//test_bbl_sort(test500_3, 500);
+
+	test_bad_algo(test30_1 , 30);
+
 
 }
-
-
 
 /*
 
 TODOS
 
 - read subject lol OK 
-- make a function to generate test sets?
+- make a function to generate test sets? // make own
 - make a validator function OK 
 - decide and code the structures OK
 - implement the different ops OK
-- code the bubble sort for *fun* purposes
+- code the bubble sort for *fun* purposes OK
+
+mkayy so c quoi les bails donc
+
+parcourir a
+mettre le premier de a sur b
+puis le 2e, check si asc or des
+ensuite parcourir a
+mettre le 
+
+
+
+
 
 
 */
